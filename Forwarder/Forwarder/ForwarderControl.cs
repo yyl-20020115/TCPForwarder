@@ -180,6 +180,7 @@ namespace Forwarder
                 tbDestPort.Enabled = false;
                 tbSrcPort.Enabled = false;
                 cbLocal.Enabled = false;
+                checkBoxLog.Enabled = false;    
                 btStart.Text = "Stop";
             }
             catch (Exception ex)
@@ -198,6 +199,8 @@ namespace Forwarder
                 tbDestPort.Enabled = true;
                 tbSrcPort.Enabled = true;
                 cbLocal.Enabled = true;
+                checkBoxLog.Enabled = true;
+
                 btStart.Text = "Start";
             }
             catch (Exception ex)
@@ -218,7 +221,7 @@ namespace Forwarder
         public string DestinationHost { get => tbDestHost.Text; set => tbDestHost.Text = value; }
         public bool Active => fw.Active;
 
-        private void btStart_Click(object sender, EventArgs e)
+        public void btStart_Click(object sender, EventArgs e)
         {
             if (fw.Active)
                 StopForwarder();
@@ -256,6 +259,11 @@ namespace Forwarder
             if (t == null)
                 return;
             FTransmission.Execute(t);
+        }
+
+        private void pConf_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 

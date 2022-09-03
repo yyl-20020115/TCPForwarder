@@ -48,11 +48,13 @@
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.ilMsg = new System.Windows.Forms.ImageList(this.components);
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.checkBoxLog = new System.Windows.Forms.CheckBox();
             this.pConf.SuspendLayout();
             this.SuspendLayout();
             // 
             // pConf
             // 
+            this.pConf.Controls.Add(this.checkBoxLog);
             this.pConf.Controls.Add(this.rbFollow);
             this.pConf.Controls.Add(this.lbInfo);
             this.pConf.Controls.Add(this.btClear);
@@ -67,17 +69,18 @@
             this.pConf.Dock = System.Windows.Forms.DockStyle.Top;
             this.pConf.Location = new System.Drawing.Point(0, 0);
             this.pConf.Name = "pConf";
-            this.pConf.Size = new System.Drawing.Size(424, 80);
+            this.pConf.Size = new System.Drawing.Size(424, 74);
             this.pConf.TabIndex = 0;
+            this.pConf.Paint += new System.Windows.Forms.PaintEventHandler(this.pConf_Paint);
             // 
             // rbFollow
             // 
             this.rbFollow.Appearance = System.Windows.Forms.Appearance.Button;
             this.rbFollow.Checked = true;
             this.rbFollow.Image = global::Forwarder.Properties.Resources.list_follow;
-            this.rbFollow.Location = new System.Drawing.Point(28, 52);
+            this.rbFollow.Location = new System.Drawing.Point(28, 48);
             this.rbFollow.Name = "rbFollow";
-            this.rbFollow.Size = new System.Drawing.Size(25, 25);
+            this.rbFollow.Size = new System.Drawing.Size(25, 23);
             this.rbFollow.TabIndex = 21;
             this.rbFollow.TabStop = true;
             this.toolTip1.SetToolTip(this.rbFollow, "Follow events");
@@ -86,9 +89,9 @@
             // lbInfo
             // 
             this.lbInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.lbInfo.Location = new System.Drawing.Point(274, 59);
+            this.lbInfo.Location = new System.Drawing.Point(274, 54);
             this.lbInfo.Name = "lbInfo";
-            this.lbInfo.Size = new System.Drawing.Size(147, 16);
+            this.lbInfo.Size = new System.Drawing.Size(147, 15);
             this.lbInfo.TabIndex = 19;
             this.lbInfo.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
@@ -96,9 +99,9 @@
             // 
             this.btClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btClear.Image = global::Forwarder.Properties.Resources.list_clear;
-            this.btClear.Location = new System.Drawing.Point(1, 52);
+            this.btClear.Location = new System.Drawing.Point(1, 48);
             this.btClear.Name = "btClear";
-            this.btClear.Size = new System.Drawing.Size(25, 25);
+            this.btClear.Size = new System.Drawing.Size(25, 23);
             this.btClear.TabIndex = 18;
             this.toolTip1.SetToolTip(this.btClear, "Clear event list");
             this.btClear.UseVisualStyleBackColor = true;
@@ -107,9 +110,9 @@
             // btStart
             // 
             this.btStart.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btStart.Location = new System.Drawing.Point(360, 25);
+            this.btStart.Location = new System.Drawing.Point(360, 23);
             this.btStart.Name = "btStart";
-            this.btStart.Size = new System.Drawing.Size(61, 23);
+            this.btStart.Size = new System.Drawing.Size(61, 21);
             this.btStart.TabIndex = 17;
             this.btStart.Text = "Start";
             this.btStart.UseVisualStyleBackColor = true;
@@ -117,37 +120,38 @@
             // 
             // tbDestPort
             // 
-            this.tbDestPort.Location = new System.Drawing.Point(274, 27);
+            this.tbDestPort.Location = new System.Drawing.Point(274, 25);
             this.tbDestPort.Name = "tbDestPort";
-            this.tbDestPort.Size = new System.Drawing.Size(41, 20);
+            this.tbDestPort.Size = new System.Drawing.Size(41, 21);
             this.tbDestPort.TabIndex = 16;
-            this.tbDestPort.Text = "8088";
+            this.tbDestPort.Text = "33211";
             this.tbDestPort.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.tbDestPort.TextChanged += new System.EventHandler(this.ConfChanged);
             // 
             // lbDestPort
             // 
             this.lbDestPort.AutoSize = true;
-            this.lbDestPort.Location = new System.Drawing.Point(243, 31);
+            this.lbDestPort.Location = new System.Drawing.Point(243, 29);
             this.lbDestPort.Name = "lbDestPort";
-            this.lbDestPort.Size = new System.Drawing.Size(29, 13);
+            this.lbDestPort.Size = new System.Drawing.Size(35, 12);
             this.lbDestPort.TabIndex = 15;
             this.lbDestPort.Text = "Port:";
             // 
             // tbDestHost
             // 
-            this.tbDestHost.Location = new System.Drawing.Point(76, 29);
+            this.tbDestHost.Location = new System.Drawing.Point(76, 27);
             this.tbDestHost.Name = "tbDestHost";
-            this.tbDestHost.Size = new System.Drawing.Size(161, 20);
+            this.tbDestHost.Size = new System.Drawing.Size(161, 21);
             this.tbDestHost.TabIndex = 14;
+            this.tbDestHost.Text = "127.0.0.1";
             this.tbDestHost.TextChanged += new System.EventHandler(this.ConfChanged);
             // 
             // lbDestHost
             // 
             this.lbDestHost.AutoSize = true;
-            this.lbDestHost.Location = new System.Drawing.Point(7, 32);
+            this.lbDestHost.Location = new System.Drawing.Point(7, 30);
             this.lbDestHost.Name = "lbDestHost";
-            this.lbDestHost.Size = new System.Drawing.Size(63, 13);
+            this.lbDestHost.Size = new System.Drawing.Size(77, 12);
             this.lbDestHost.TabIndex = 13;
             this.lbDestHost.Text = "Destination:";
             // 
@@ -156,7 +160,7 @@
             this.cbLocal.AutoSize = true;
             this.cbLocal.Location = new System.Drawing.Point(123, 6);
             this.cbLocal.Name = "cbLocal";
-            this.cbLocal.Size = new System.Drawing.Size(131, 17);
+            this.cbLocal.Size = new System.Drawing.Size(156, 16);
             this.cbLocal.TabIndex = 12;
             this.cbLocal.Text = "only local connections";
             this.cbLocal.UseVisualStyleBackColor = true;
@@ -166,7 +170,7 @@
             // 
             this.tbSrcPort.Location = new System.Drawing.Point(76, 3);
             this.tbSrcPort.Name = "tbSrcPort";
-            this.tbSrcPort.Size = new System.Drawing.Size(41, 20);
+            this.tbSrcPort.Size = new System.Drawing.Size(41, 21);
             this.tbSrcPort.TabIndex = 11;
             this.tbSrcPort.Text = "8088";
             this.tbSrcPort.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
@@ -177,7 +181,7 @@
             this.lbSrc.AutoSize = true;
             this.lbSrc.Location = new System.Drawing.Point(4, 6);
             this.lbSrc.Name = "lbSrc";
-            this.lbSrc.Size = new System.Drawing.Size(66, 13);
+            this.lbSrc.Size = new System.Drawing.Size(77, 12);
             this.lbSrc.TabIndex = 10;
             this.lbSrc.Text = "Source Port:";
             // 
@@ -191,10 +195,10 @@
             this.lvHistory.FullRowSelect = true;
             this.lvHistory.GridLines = true;
             this.lvHistory.HideSelection = false;
-            this.lvHistory.Location = new System.Drawing.Point(0, 80);
+            this.lvHistory.Location = new System.Drawing.Point(0, 74);
             this.lvHistory.MultiSelect = false;
             this.lvHistory.Name = "lvHistory";
-            this.lvHistory.Size = new System.Drawing.Size(424, 342);
+            this.lvHistory.Size = new System.Drawing.Size(424, 316);
             this.lvHistory.SmallImageList = this.ilMsg;
             this.lvHistory.TabIndex = 1;
             this.lvHistory.UseCompatibleStateImageBehavior = false;
@@ -230,14 +234,24 @@
             this.ilMsg.Images.SetKeyName(4, "msg_come.png");
             this.ilMsg.Images.SetKeyName(5, "msg_finish.png");
             // 
+            // checkBoxLog
+            // 
+            this.checkBoxLog.AutoSize = true;
+            this.checkBoxLog.Location = new System.Drawing.Point(286, 6);
+            this.checkBoxLog.Name = "checkBoxLog";
+            this.checkBoxLog.Size = new System.Drawing.Size(42, 16);
+            this.checkBoxLog.TabIndex = 22;
+            this.checkBoxLog.Text = "Log";
+            this.checkBoxLog.UseVisualStyleBackColor = true;
+            // 
             // ForwarderControl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.lvHistory);
             this.Controls.Add(this.pConf);
             this.Name = "ForwarderControl";
-            this.Size = new System.Drawing.Size(424, 422);
+            this.Size = new System.Drawing.Size(424, 390);
             this.pConf.ResumeLayout(false);
             this.pConf.PerformLayout();
             this.ResumeLayout(false);
@@ -264,5 +278,6 @@
         private System.Windows.Forms.RadioButton rbFollow;
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.ColumnHeader columnHeader3;
+        private System.Windows.Forms.CheckBox checkBoxLog;
     }
 }

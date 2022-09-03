@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -31,21 +32,39 @@ using System.Windows.Forms;
 
 namespace Forwarder
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
         private const string CFG_FILENAME = "Forwarder.conf";
         private string cfgPath;
 
-        public Form1()
+        protected ForwarderControl[] ForwarderControls
+        {
+            get
+            {
+                var os = new ForwarderControl[this.lbForwarders.Items.Count];
+                this.lbForwarders.Items.CopyTo(os, 0);
+                return os;
+            }
+        }
+        public MainForm()
         {
             InitializeComponent();
             Text += " " + Program.VERSION;
             cfgPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), CFG_FILENAME);
             if (!LoadForwarders())
+            {
                 AddForwarder();
+            }
             LookupUI();
         }
-
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            foreach(var fc in this.ForwarderControls)
+            {
+                fc.btStart_Click(this, e);
+            }
+        }
         private void LookupUI()
         {
             btDel.Enabled = lbForwarders.SelectedItem != null;
@@ -95,8 +114,10 @@ namespace Forwarder
 
         private ForwarderControl AddForwarder()
         {
-            ForwarderControl fc = new ForwarderControl();
-            fc.WhenChanged = ForwarderChagned;
+            var fc = new ForwarderControl
+            {
+                WhenChanged = ForwarderChagned
+            };
             lbForwarders.SelectedIndex = lbForwarders.Items.Add(fc);
             return fc;
         }
@@ -109,7 +130,7 @@ namespace Forwarder
         private void lbForwarders_SelectedIndexChanged(object sender, EventArgs e)
         {
             LookupUI();
-            ForwarderControl fc = lbForwarders.SelectedItem as ForwarderControl;
+            var fc = lbForwarders.SelectedItem as ForwarderControl;
             if (fc == null)
                 return;
             pFord.Controls.Clear();
@@ -166,7 +187,7 @@ namespace Forwarder
 
         private void lbForwarders_DoubleClick(object sender, EventArgs e)
         {
-            ForwarderControl fc = lbForwarders.SelectedItem as ForwarderControl;
+            var fc = lbForwarders.SelectedItem as ForwarderControl;
             if (fc == null)
                 return;
             if (fc.Active)
