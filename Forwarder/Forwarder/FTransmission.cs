@@ -44,7 +44,8 @@ public partial class FTransmission : Form
     {
         if (this.trans != null)
         {
-            lbInfo.Text = "Transmission between " + trans.SourceIP + " and " + trans.DestinationIP;
+            lbInfo.AutoSize = true;
+            lbInfo.Text = "Transmission " + trans.SourceIP + " -> " + trans.DestinationIP;
             lbAt.Text = trans.Date.ToLongDateString() + " " + trans.Date.ToLongTimeString();
             lbCtt.Text = "Uploaded: " + Utils.FBytes(trans.Uploaded) + " Downloaded: " + Utils.FBytes(trans.Downloaded);
             int cscroll = pTimeline.VerticalScroll.Value;

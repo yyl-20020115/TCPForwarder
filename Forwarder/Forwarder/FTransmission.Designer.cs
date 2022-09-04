@@ -39,19 +39,19 @@
             // lbInfo
             // 
             this.lbInfo.AutoSize = true;
-            this.lbInfo.Location = new System.Drawing.Point(12, 9);
+            this.lbInfo.Location = new System.Drawing.Point(12, 8);
             this.lbInfo.Name = "lbInfo";
-            this.lbInfo.Size = new System.Drawing.Size(112, 13);
+            this.lbInfo.Size = new System.Drawing.Size(83, 12);
             this.lbInfo.TabIndex = 0;
-            this.lbInfo.Text = "Transmission between";
+            this.lbInfo.Text = "Transmission ";
             // 
             // lbAt
             // 
             this.lbAt.AutoSize = true;
             this.lbAt.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.lbAt.Location = new System.Drawing.Point(19, 22);
+            this.lbAt.Location = new System.Drawing.Point(19, 20);
             this.lbAt.Name = "lbAt";
-            this.lbAt.Size = new System.Drawing.Size(16, 13);
+            this.lbAt.Size = new System.Drawing.Size(17, 12);
             this.lbAt.TabIndex = 1;
             this.lbAt.Text = "at";
             // 
@@ -59,9 +59,9 @@
             // 
             this.lbCtt.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.lbCtt.Location = new System.Drawing.Point(12, 35);
+            this.lbCtt.Location = new System.Drawing.Point(12, 32);
             this.lbCtt.Name = "lbCtt";
-            this.lbCtt.Size = new System.Drawing.Size(360, 13);
+            this.lbCtt.Size = new System.Drawing.Size(360, 12);
             this.lbCtt.TabIndex = 2;
             this.lbCtt.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
@@ -73,9 +73,9 @@
             this.pTimeline.AutoScroll = true;
             this.pTimeline.BackColor = System.Drawing.SystemColors.Window;
             this.pTimeline.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pTimeline.Location = new System.Drawing.Point(12, 51);
+            this.pTimeline.Location = new System.Drawing.Point(12, 47);
             this.pTimeline.Name = "pTimeline";
-            this.pTimeline.Size = new System.Drawing.Size(360, 355);
+            this.pTimeline.Size = new System.Drawing.Size(360, 328);
             this.pTimeline.TabIndex = 3;
             this.pTimeline.Resize += new System.EventHandler(this.pTimeline_Resize);
             // 
@@ -86,16 +86,16 @@
             // 
             // FTransmission
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(384, 418);
+            this.ClientSize = new System.Drawing.Size(384, 386);
             this.Controls.Add(this.pTimeline);
             this.Controls.Add(this.lbCtt);
             this.Controls.Add(this.lbAt);
             this.Controls.Add(this.lbInfo);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(300, 200);
+            this.MinimumSize = new System.Drawing.Size(300, 188);
             this.Name = "FTransmission";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;

@@ -180,7 +180,8 @@ public class Forwarder
                 fw = forwarder;
                 scksrc = source;
                 sckdst = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                trans = new Transmission(scksrc.RemoteEndPoint as IPEndPoint, sckdst.RemoteEndPoint as IPEndPoint);
+                trans = new Transmission(scksrc.RemoteEndPoint 
+                    as IPEndPoint, remote);
                 forwarder.Message(ForwarderMessage.FromNewTransmission(trans));
                 sckdst.Connect(remote);
             }
