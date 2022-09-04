@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading.Tasks;
 
 //Copyright(c) 2018 Iván Dominguez (XWolf Override)
 //
@@ -23,88 +21,79 @@ using System.Threading.Tasks;
 //   misrepresented as being the original software.
 //3. This notice may not be removed or altered from any source distribution.
 
-namespace Forwarder
+namespace Forwarder;
+
+static class Utils
 {
-    static class Utils
+    private const int MAX_DIALOG_PREVIEW = 256;
+    public static bool IsConnected(this Socket socket)
     {
-        private const int MAX_DIALOG_PREVIEW = 256;
-        public static bool IsConnected(this Socket socket)
+        try
         {
-            try
-            {
-                return !(socket.Poll(1, SelectMode.SelectRead) && socket.Available == 0);
-            }
-            catch (SocketException) { return false; }
+            return !(socket.Poll(1, SelectMode.SelectRead) && socket.Available == 0);
         }
-
-        public static string FBytes(int bytes)
-        {
-            if (bytes < 1024)
-                return bytes.ToString()+"b";
-            string tail = null;
-            double b = bytes;
-            if (b > 1024)
-            {
-                tail = "Kb";
-                b /= 1024;
-            }
-            if (b > 1024)
-            {
-                tail = "Mb";
-                b /= 1024;
-            }
-            if (b > 1024)
-            {
-                tail = "Gb";
-                b /= 1024;
-            }
-            return b.ToString("#0.00") + tail;
-        }
-
-        public static string FTime(TimeSpan ts)
-        {
-            StringBuilder result = new StringBuilder();
-            if (ts.Days > 0)
-            {
-                result.Append(ts.Days);
-                result.Append("d ");
-            }
-            if (ts.Hours > 0)
-            {
-                result.Append(ts.Hours);
-                result.Append("h ");
-            }
-            if (ts.Minutes > 0)
-            {
-                result.Append(ts.Minutes);
-                result.Append("m ");
-            }
-            if (ts.Seconds > 0)
-            {
-                result.Append(ts.Seconds);
-                result.Append("s ");
-            }
-            if (ts.Milliseconds > 0 || result.Length == 0)
-            {
-                result.Append(ts.Milliseconds);
-                result.Append("ms ");
-            }
-            return result.ToString();
-        }
-
-        public static string BinToTextSample(byte[] data)
-        {
-            if (data == null || data.Length == 0)
-                return "";
-            string result = Encoding.ASCII.GetString(data, 0, Math.Min(MAX_DIALOG_PREVIEW, data.Length));
-            StringBuilder sb = new StringBuilder(result.Trim());
-            for (int i = 0; i < sb.Length; i++)
-                if (Char.IsControl(sb[i]) && sb[i] != '\n' && sb[i] != '\r')
-                    sb[i] = '□';
-            result = sb.ToString();
-            if (data.Length > MAX_DIALOG_PREVIEW)
-                result += "\r\n...";
-            return result;
+        catch (SocketException) { 
+            return false; 
         }
     }
+
+    public static string FBytes(int bytes)
+    {
+        if (bytes < 1024)
+            return bytes.ToString()+"b";
+        string tail = null;
+        double b = bytes;
+        if (b > 1024)
+        {
+            tail = "Kb";
+            b /= 1024;
+        }
+        if (b > 1024)
+        {
+            tail = "Mb";
+            b /= 1024;
+        }
+        if (b > 1024)
+        {
+            tail = "Gb";
+            b /= 1024;
+        }
+        return b.ToString("#0.00") + tail;
+    }
+
+    public static string FTime(TimeSpan ts)
+    {
+        var result = new StringBuilder();
+        if (ts.Days > 0)
+        {
+            result.Append(ts.Days);
+            result.Append("d ");
+        }
+        if (ts.Hours > 0)
+        {
+            result.Append(ts.Hours);
+            result.Append("h ");
+        }
+        if (ts.Minutes > 0)
+        {
+            result.Append(ts.Minutes);
+            result.Append("m ");
+        }
+        if (ts.Seconds > 0)
+        {
+            result.Append(ts.Seconds);
+            result.Append("s ");
+        }
+        if (ts.Milliseconds > 0 || result.Length == 0)
+        {
+            result.Append(ts.Milliseconds);
+            result.Append("ms ");
+        }
+        return result.ToString();
+    }
+
+    public static string BinToTextSample(byte[] data) =>
+        (data == null || data.Length == 0)
+            ? ""
+            : string.Join(" ", data.Select(d => $"{d:X2}").ToArray());
 }

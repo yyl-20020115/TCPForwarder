@@ -1,21 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
-namespace Forwarder
+namespace Forwarder;
+
+public partial class DBPanel : Panel
 {
-    public partial class DBPanel : Panel
+    public DBPanel()
     {
-        public DBPanel()
-        {
-            InitializeComponent();
-            DoubleBuffered = true;
-        }
+        InitializeComponent();
+        DoubleBuffered = true;
     }
 }

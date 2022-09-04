@@ -1,15 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Net;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 //Copyright(c) 2018 Iván Dominguez (XWolf Override)
@@ -30,170 +23,169 @@ using System.Windows.Forms;
 //   misrepresented as being the original software.
 //3. This notice may not be removed or altered from any source distribution.
 
-namespace Forwarder
+namespace Forwarder;
+
+public partial class MainForm : Form
 {
-    public partial class MainForm : Form
+    private const string CFG_FILENAME = "Forwarder.conf";
+    private readonly string cfgPath;
+
+    protected ForwarderControl[] ForwarderControls
     {
-        private const string CFG_FILENAME = "Forwarder.conf";
-        private string cfgPath;
-
-        protected ForwarderControl[] ForwarderControls
+        get
         {
-            get
-            {
-                var os = new ForwarderControl[this.lbForwarders.Items.Count];
-                this.lbForwarders.Items.CopyTo(os, 0);
-                return os;
-            }
+            var os = new ForwarderControl[this.lbForwarders.Items.Count];
+            this.lbForwarders.Items.CopyTo(os, 0);
+            return os;
         }
-        public MainForm()
-        {
-            InitializeComponent();
-            Text += " " + Program.VERSION;
-            cfgPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), CFG_FILENAME);
-            if (!LoadForwarders())
-            {
-                AddForwarder();
-            }
-            LookupUI();
-        }
-        protected override void OnLoad(EventArgs e)
-        {
-            base.OnLoad(e);
-            foreach(var fc in this.ForwarderControls)
-            {
-                fc.btStart_Click(this, e);
-            }
-        }
-        private void LookupUI()
-        {
-            btDel.Enabled = lbForwarders.SelectedItem != null;
-        }
-
-        private void ForwarderChagned()
-        {
-            lbForwarders.Invalidate();
-        }
-
-        private bool LoadForwarders()
-        {
-            if (!File.Exists(cfgPath))
-                return false;
-            try
-            {
-                foreach(string line in File.ReadAllLines(cfgPath))
-                {
-                    string[] lp = line.Split(':');
-                    if (lp.Length != 3 || lp[0].Length<1)
-                        continue;
-                    ForwarderControl fc = AddForwarder();
-                    fc.SourceLocal = lp[0][0] == '-';
-                    fc.SourcePort = lp[0].Substring(1);
-                    fc.DestinationHost = lp[1];
-                    fc.DestinationPort = lp[2];
-                }
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        private void SaveForwarders()
-        {
-            try
-            {
-                List<string> fws = new List<string>();
-                foreach(ForwarderControl fc in lbForwarders.Items)
-                    fws.Add( (fc.SourceLocal ? "-" : "*") + fc.SourcePort + ":" + fc.DestinationHost + ":" + fc.DestinationPort);
-                File.WriteAllLines(cfgPath, fws.ToArray());
-            }
-            catch { };
-        }
-
-        private ForwarderControl AddForwarder()
-        {
-            var fc = new ForwarderControl
-            {
-                WhenChanged = ForwarderChagned
-            };
-            lbForwarders.SelectedIndex = lbForwarders.Items.Add(fc);
-            return fc;
-        }
-
-        private void btAdd_Click(object sender, EventArgs e)
+    }
+    public MainForm()
+    {
+        InitializeComponent();
+        Text += " " + Program.VERSION;
+        cfgPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), CFG_FILENAME);
+        if (!LoadForwarders())
         {
             AddForwarder();
         }
-
-        private void lbForwarders_SelectedIndexChanged(object sender, EventArgs e)
+        LookupUI();
+    }
+    protected override void OnLoad(EventArgs e)
+    {
+        base.OnLoad(e);
+        foreach(var fc in this.ForwarderControls)
         {
-            LookupUI();
-            var fc = lbForwarders.SelectedItem as ForwarderControl;
-            if (fc == null)
-                return;
-            pFord.Controls.Clear();
-            pFord.Controls.Add(fc);
-            fc.Dock = DockStyle.Fill;
+            fc.btStart_Click(this, e);
         }
+    }
+    private void LookupUI()
+    {
+        btDel.Enabled = lbForwarders.SelectedItem != null;
+    }
 
-        private void btDel_Click(object sender, EventArgs e)
+    private void ForwarderChagned()
+    {
+        lbForwarders.Invalidate();
+    }
+
+    private bool LoadForwarders()
+    {
+        if (!File.Exists(cfgPath))
+            return false;
+        try
         {
-            ForwarderControl fc = lbForwarders.SelectedItem as ForwarderControl;
-            if (fc == null)
-                return;
+            foreach(var line in File.ReadAllLines(cfgPath))
+            {
+                var lp = line.Split(':');
+                if (lp.Length != 3 || lp[0].Length<1)
+                    continue;
+                var fc = AddForwarder();
+                fc.SourceLocal = lp[0][0] == '-';
+                fc.SourcePort = lp[0].Substring(1);
+                fc.DestinationHost = lp[1];
+                fc.DestinationPort = lp[2];
+            }
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    private void SaveForwarders()
+    {
+        try
+        {
+            var fws = new List<string>();
+            foreach(var fc in this.ForwarderControls)
+                fws.Add( (fc.SourceLocal ? "-" : "*") + fc.SourcePort + ":" + fc.DestinationHost + ":" + fc.DestinationPort);
+            File.WriteAllLines(cfgPath, fws.ToArray());
+        }
+        catch { };
+    }
+
+    private ForwarderControl AddForwarder()
+    {
+        var fc = new ForwarderControl
+        {
+            WhenChanged = ForwarderChagned
+        };
+        lbForwarders.SelectedIndex = lbForwarders.Items.Add(fc);
+        return fc;
+    }
+
+    private void btAdd_Click(object sender, EventArgs e)
+    {
+        AddForwarder();
+    }
+
+    private void lbForwarders_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        LookupUI();
+        var fc = lbForwarders.SelectedItem as ForwarderControl;
+        if (fc == null)
+            return;
+        pFord.Controls.Clear();
+        pFord.Controls.Add(fc);
+        fc.Dock = DockStyle.Fill;
+    }
+
+    private void btDel_Click(object sender, EventArgs e)
+    {
+        var fc = lbForwarders.SelectedItem as ForwarderControl;
+        if (fc == null)
+            return;
+        fc.StopForwarder();
+        lbForwarders.Items.Remove(fc);
+        fc.Dispose();
+        LookupUI();
+    }
+
+    private void lbForwarders_DrawItem(object sender, DrawItemEventArgs e)
+    {
+        e.DrawBackground();
+        if (e.Index >= 0 && e.Index < lbForwarders.Items.Count)
+        {
+            var fc = lbForwarders.Items[e.Index] as ForwarderControl;
+            if (fc != null)
+            {
+                e.Graphics.DrawImage(Properties.Resources.world, 2, e.Bounds.Top + 2);
+                e.Graphics.DrawImage(fc.Active ? Properties.Resources.link_go : Properties.Resources.cross, 8, e.Bounds.Top + 6);
+                if (fc.SourceLocal)
+                    e.Graphics.DrawImage(Properties.Resources.computer, e.Bounds.Right - 18, e.Bounds.Top + 2);
+                var br = new SolidBrush(e.ForeColor);
+                e.Graphics.DrawString(fc.SourcePort, lbForwarders.Font, br, 38, e.Bounds.Top + 2);
+                e.Graphics.DrawString(fc.DestinationHost, lbForwarders.Font, br, 40, e.Bounds.Top + 20);
+                e.Graphics.DrawString(fc.DestinationPort, lbForwarders.Font, br, e.Bounds.Right - (2 + e.Graphics.MeasureString(fc.DestinationPort, lbForwarders.Font).Width), e.Bounds.Top + 20);
+            }
+        }
+        e.DrawFocusRectangle();
+    }
+
+    private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+    {
+        SaveForwarders();
+        while (lbForwarders.Items.Count > 0)
+        {
+            lbForwarders.SelectedIndex = 0;
+            btDel_Click(sender, e);
+        }
+    }
+
+    private void btAbout_Click(object sender, EventArgs e)
+    {
+        FAbout.Execute();
+    }
+
+    private void lbForwarders_DoubleClick(object sender, EventArgs e)
+    {
+        var fc = lbForwarders.SelectedItem as ForwarderControl;
+        if (fc == null)
+            return;
+        if (fc.Active)
             fc.StopForwarder();
-            lbForwarders.Items.Remove(fc);
-            fc.Dispose();
-            LookupUI();
-        }
-
-        private void lbForwarders_DrawItem(object sender, DrawItemEventArgs e)
-        {
-            e.DrawBackground();
-            if (e.Index >= 0 && e.Index < lbForwarders.Items.Count)
-            {
-                ForwarderControl fc = lbForwarders.Items[e.Index] as ForwarderControl;
-                if (fc != null)
-                {
-                    e.Graphics.DrawImage(Properties.Resources.world, 2, e.Bounds.Top + 2);
-                    e.Graphics.DrawImage(fc.Active ? Properties.Resources.link_go : Properties.Resources.cross, 8, e.Bounds.Top + 6);
-                    if (fc.SourceLocal)
-                        e.Graphics.DrawImage(Properties.Resources.computer, e.Bounds.Right - 18, e.Bounds.Top + 2);
-                    Brush br = new SolidBrush(e.ForeColor);
-                    e.Graphics.DrawString(fc.SourcePort, lbForwarders.Font, br, 38, e.Bounds.Top + 2);
-                    e.Graphics.DrawString(fc.DestinationHost, lbForwarders.Font, br, 40, e.Bounds.Top + 20);
-                    e.Graphics.DrawString(fc.DestinationPort, lbForwarders.Font, br, e.Bounds.Right - (2 + e.Graphics.MeasureString(fc.DestinationPort, lbForwarders.Font).Width), e.Bounds.Top + 20);
-                }
-            }
-            e.DrawFocusRectangle();
-        }
-
-        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            SaveForwarders();
-            while (lbForwarders.Items.Count > 0)
-            {
-                lbForwarders.SelectedIndex = 0;
-                btDel_Click(sender, e);
-            }
-        }
-
-        private void btAbout_Click(object sender, EventArgs e)
-        {
-            FAbout.Execute();
-        }
-
-        private void lbForwarders_DoubleClick(object sender, EventArgs e)
-        {
-            var fc = lbForwarders.SelectedItem as ForwarderControl;
-            if (fc == null)
-                return;
-            if (fc.Active)
-                fc.StopForwarder();
-            else
-                fc.StartForwarder();
-        }
+        else
+            fc.StartForwarder();
     }
 }

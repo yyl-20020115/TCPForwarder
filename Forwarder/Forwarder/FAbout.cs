@@ -1,15 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 //Copyright(c) 2018 Iván Dominguez (XWolf Override)
@@ -30,55 +22,52 @@ using System.Windows.Forms;
 //   misrepresented as being the original software.
 //3. This notice may not be removed or altered from any source distribution.
 
-namespace Forwarder
+namespace Forwarder;
+
+public partial class FAbout : Form
 {
-    public partial class FAbout : Form
+    private FAbout()
     {
-        private FAbout()
-        {
-            InitializeComponent();
-            lbVer.Text = Program.VERSION;
-            GetIp();
-        }
+        InitializeComponent();
+        lbVer.Text = Program.VERSION;
+        GetIp();
+    }
 
-        public static void Execute()
-        {
-            using (FAbout f = new FAbout())
-            {
-                f.ShowDialog();
-            }
-        }
+    public static void Execute()
+    {
+        using var f = new FAbout();
+        f.ShowDialog();
+    }
 
-        private void GetIp()
+    private void GetIp()
+    {
+        var output = "";
+        foreach (var item in NetworkInterface.GetAllNetworkInterfaces())
+            if (item.NetworkInterfaceType != NetworkInterfaceType.Loopback && item.OperationalStatus == OperationalStatus.Up)
+                foreach (var ip in item.GetIPProperties().UnicastAddresses)
+                    if (ip.Address.AddressFamily == AddressFamily.InterNetwork)
+                        output += ip.Address.ToString() + "\r\n";
+        output = output.Trim();
+        if (output.Length == 0)
+        
+            lbIp.Visible = false;
+        else
         {
-            string output = "";
-            foreach (NetworkInterface item in NetworkInterface.GetAllNetworkInterfaces())
-                if (item.NetworkInterfaceType != NetworkInterfaceType.Loopback && item.OperationalStatus == OperationalStatus.Up)
-                    foreach (UnicastIPAddressInformation ip in item.GetIPProperties().UnicastAddresses)
-                        if (ip.Address.AddressFamily == AddressFamily.InterNetwork)
-                            output += ip.Address.ToString() + "\r\n";
-            output = output.Trim();
-            if (output.Length == 0)
-            
-                lbIp.Visible = false;
-            else
-            {
-                lbIp.Text = output;
-                Height += lbIp.Height;
-                lbText.Height -= lbIp.Height;
-                lbIp.Top = ClientSize.Height - (lbIp.Height + 12);
-            }
             lbIp.Text = output;
+            Height += lbIp.Height;
+            lbText.Height -= lbIp.Height;
+            lbIp.Top = ClientSize.Height - (lbIp.Height + 12);
         }
+        lbIp.Text = output;
+    }
 
-        private void llbAuthor_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            Process.Start("https://xwolf.es/2018/02/171/");
-        }
+    private void llbAuthor_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+    {
+        Process.Start("https://xwolf.es/2018/02/171/");
+    }
 
-        private void btOk_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
+    private void btOk_Click(object sender, EventArgs e)
+    {
+        Close();
     }
 }
